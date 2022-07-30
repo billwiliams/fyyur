@@ -1,1 +1,3 @@
 bitbucket-pipelines.yml
+node_modules/
+/static/packa*.*
