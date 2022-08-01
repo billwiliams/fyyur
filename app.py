@@ -43,7 +43,8 @@ class Venue(db.Model):
     facebook_link = db.Column(db.String(120))
     website_link=db.Column(db.String(120))
     looking_for_talent=db.Column(db.Boolean)
-    genres=db.Column(db.ARRAY(db.String))
+    genres=db.Column(db.String(120))
+    seeking_description=db.Column(db.String(120))
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
 
