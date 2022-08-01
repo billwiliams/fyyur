@@ -1,3 +1,4 @@
 bitbucket-pipelines.yml
 node_modules/
 /static/packa*.*
+__pycache__/
