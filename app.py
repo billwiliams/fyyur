@@ -269,7 +269,7 @@ def create_venue_submission():
     # on unsuccessful db insert, flash an error instead.
     db.session.rollback()
     print(sys.exc_info())
-    flash('Venue ' + form.name.data  + ' could not be listed.')
+    flash('Venue ' + form.name.data  + ' could not be listed.','error')
     
   finally:
     # close the db session and redirect to template
@@ -488,7 +488,7 @@ def create_artist_submission():
     # on unsuccessful db insert, flash an error instead.
     db.session.rollback()
     print(sys.exc_info())
-    flash('Artist ' + request.form['name'] + ' was not listed')
+    flash('Artist ' + request.form['name'] + ' was not listed','error')
     
   finally:
     # close the db session and redirect to template
