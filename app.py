@@ -70,7 +70,7 @@ class Artist(db.Model):
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 
 class Show(db.Model):
-  __tablename= 'Show'
+  __tablename__= 'Show'
   id=db.Column(db.Integer, primary_key=True)
   venue_id=db.Column(db.Integer, db.ForeignKey('Venue.id',ondelete='CASCADE') , nullable=False)
   artist_id=db.Column(db.Integer, db.ForeignKey('Artist.id',ondelete='CASCADE') , nullable=False)
