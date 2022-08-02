@@ -15,6 +15,7 @@ from logging import Formatter, FileHandler
 from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
+import sys
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
@@ -43,7 +44,7 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
-    website=db.Column(db.String(120))
+    website_link=db.Column(db.String(120))
     seeking_talent=db.Column(db.Boolean,nullable=False, default=True)
     genres=db.Column(db.String(120))
     seeking_description=db.Column(db.String(120))
@@ -242,10 +243,11 @@ def create_venue_form():
 def create_venue_submission():
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
+  form=VenueForm(request.form)
   try:
     # obtain form and validate data
-    form=VenueForm()
-    if form.validate_on_submit():
+    
+    if form.validate():
 
       venue=Venue(name=form.name.data,city=form.city.data,address=form.address.data,phone=form.phone.data,
       genres=form.genres.data,website=form.website.data,facebook_link=form.facebook_link.data,
@@ -259,10 +261,12 @@ def create_venue_submission():
   except:
     # TODO: on unsuccessful db insert, flash an error instead.
     db.session.rollback()
+    print(sys.exc_info())
     flash('Venue ' + form.name.data  + ' could not be listed.')
     # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
   # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
   finally:
+    db.session.close()
     return render_template('pages/home.html')
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
