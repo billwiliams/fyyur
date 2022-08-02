@@ -2,6 +2,7 @@
 # Imports
 #----------------------------------------------------------------------------#
 
+from email.policy import default
 import json
 import dateutil.parser
 import babel
@@ -61,7 +62,7 @@ class Artist(db.Model):
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website_link=db.Column(db.String(120))
-    looking_for_venues=db.Column(db.Boolean)
+    seeking_venue=db.Column(db.Boolean,nullable=False,default=True)
     seeking_description=db.Column(db.String(500))
     shows=db.relationship('Show',backref='Artist',passive_deletes=True,lazy=True)
 
