@@ -250,7 +250,7 @@ def create_venue_submission():
     if form.validate():
 
       venue=Venue(name=form.name.data,city=form.city.data,address=form.address.data,phone=form.phone.data,
-      genres=form.genres.data,website=form.website.data,facebook_link=form.facebook_link.data,
+      genres=form.genres.data,website_link=form.website_link.data,facebook_link=form.facebook_link.data,
       seeking_talent=form.seeking_talent.data,image_link=form.image_link.data,
       seeking_description=form.seeking_description.data)
 
