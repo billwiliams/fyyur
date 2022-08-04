@@ -241,39 +241,44 @@ def create_venue_submission():
   # insert form data as a new Venue record in the db, instead
   # obtain form
   form=VenueForm(request.form)
-  try:
-    # validate data 
+  if form.validate():
+    try:
+      # validate data 
+      
     
-    if form.validate():
 
-      venue=Venue(name=form.name.data,
-      city=form.city.data,
-      address=form.address.data,
-      phone=form.phone.data,
-      state=form.state.data,
-      genres=form.genres.data,
-      website_link=form.website_link.data,
-      facebook_link=form.facebook_link.data,
-      seeking_talent=form.seeking_talent.data,
-      image_link=form.image_link.data,
-      seeking_description=form.seeking_description.data)
+        venue=Venue(name=form.name.data,
+        city=form.city.data,
+        address=form.address.data,
+        phone=form.phone.data,
+        state=form.state.data,
+        genres=form.genres.data,
+        website_link=form.website_link.data,
+        facebook_link=form.facebook_link.data,
+        seeking_talent=form.seeking_talent.data,
+        image_link=form.image_link.data,
+        seeking_description=form.seeking_description.data)
 
-    # on successful db insert, flash success
-      db.session.add(venue)
-      db.session.commit()
-      flash('Venue ' + form.name.data  + ' was successfully listed!')
+      # on successful db insert, flash success
+        db.session.add(venue)
+        db.session.commit()
+        flash('Venue  was successfully listed!')
+    
+
+    except:
+      # on unsuccessful db insert, flash an error instead.
+      db.session.rollback()
+      print(sys.exc_info())
+      flash('Venue  could not be listed.','error')
+      
+    finally:
+      # close the db session and redirect to template
+      db.session.close()
+  else:
+    flash('Venue  could not be listed.','error')
+
   
-
-  except:
-    # on unsuccessful db insert, flash an error instead.
-    db.session.rollback()
-    print(sys.exc_info())
-    flash('Venue ' + form.name.data  + ' could not be listed.','error')
-    
-  finally:
-    # close the db session and redirect to template
-    db.session.close()
-    return render_template('pages/home.html')
+  return render_template('pages/home.html')
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
