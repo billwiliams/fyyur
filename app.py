@@ -262,6 +262,9 @@ def create_venue_submission():
       db.session.add(venue)
       db.session.commit()
       flash('Venue ' + form.name.data  + ' was successfully listed!')
+    else:
+      flash('Venue could not  be listed!')
+
   except:
     # on unsuccessful db insert, flash an error instead.
     db.session.rollback()
