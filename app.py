@@ -109,27 +109,26 @@ def index():
 def venues():
   # TODO: replace with real venues data.
   #       num_upcoming_shows should be aggregated based on number of upcoming shows per venue.
-  data=[{
-    "city": "San Francisco",
-    "state": "CA",
-    "venues": [{
-      "id": 1,
-      "name": "The Musical Hop",
-      "num_upcoming_shows": 0,
-    }, {
-      "id": 3,
-      "name": "Park Square Live Music & Coffee",
-      "num_upcoming_shows": 1,
-    }]
-  }, {
-    "city": "New York",
-    "state": "NY",
-    "venues": [{
-      "id": 2,
-      "name": "The Dueling Pianos Bar",
-      "num_upcoming_shows": 0,
-    }]
-  }]
+  data=[]
+  venue_locations=db.session.query(Venue.city,Venue.state).group_by(Venue.city,Venue.state).all()
+  for venue_location in venue_locations:
+    venue_state_city={"city":venue_location.city,"state":venue_location.state}
+    # query for venue extra details
+    venue_state_city['venues']=[]
+    venues_in_state_city=db.session.query(Venue.id,Venue.name).\
+      filter(Venue.state==venue_location.state,Venue.city==venue_location.city).all()
+    for venue in venues_in_state_city:
+      # get number of upcoming shows
+      num_upcoming_shows=Show.query.filter(Show.id==venue.id).filter(Show.start_time>=datetime.today().date()).count()
+      # append the venue details to the venue_details dict
+      venue_details={'id':venue.id,"name":venue.name,"num_upcoming_shows":num_upcoming_shows}
+      
+      venue_state_city['venues'].append(venue_details)
+    #append the combined state city with venues to the data list
+    data.append(venue_state_city)
+
+
+  
   return render_template('pages/venues.html', areas=data);
 
 @app.route('/venues/search', methods=['POST'])
