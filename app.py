@@ -504,37 +504,40 @@ def create_artist_submission():
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
   form=ArtistForm(request.form)
+  if form.validate():
 
-  try:
-    # validate data 
+    try:
+      # validate data 
+      
     
-    if form.validate():
 
-      artist=Artist(name=form.name.data,
-      city=form.city.data,
-      phone=form.phone.data,
-      genres=form.genres.data,
-      state=form.state.data,
-      website_link=form.website_link.data,
-      facebook_link=form.facebook_link.data,
-      seeking_venue=form.seeking_venue.data,
-      image_link=form.image_link.data,
-      seeking_description=form.seeking_description.data)
+        artist=Artist(name=form.name.data,
+        city=form.city.data,
+        phone=form.phone.data,
+        genres=form.genres.data,
+        state=form.state.data,
+        website_link=form.website_link.data,
+        facebook_link=form.facebook_link.data,
+        seeking_venue=form.seeking_venue.data,
+        image_link=form.image_link.data,
+        seeking_description=form.seeking_description.data)
 
-    # on successful db insert, flash success
-      db.session.add(artist)
-      db.session.commit()
-      flash('Artist ' + request.form['name'] + ' was successfully listed!')
-  except:
-    # on unsuccessful db insert, flash an error instead.
-    db.session.rollback()
-    print(sys.exc_info())
-    flash('Artist ' + request.form['name'] + ' was not listed','error')
-    
-  finally:
-    # close the db session and redirect to template
-    db.session.close()
-    return render_template('pages/home.html')
+      # on successful db insert, flash success
+        db.session.add(artist)
+        db.session.commit()
+        flash('Artist ' + request.form['name'] + ' was successfully listed!')
+    except:
+      # on unsuccessful db insert, flash an error instead.
+      db.session.rollback()
+      flash('Artist was not listed','error')
+      
+    finally:
+      # close the db session and redirect to template
+      db.session.close()
+  else:
+     flash('Artist was not listed','error')
+
+  return render_template('pages/home.html')
 
 
 #  Shows
