@@ -581,30 +581,32 @@ def create_shows():
 def create_show_submission():
   # called to create new shows in the db, upon submitting new show listing form
   form=ShowForm(request.form)
-
-  try:
-    # validate data 
+  if form.validate():
+    try:
+      # validate data 
+      
     
-    if form.validate():
 
-      show=Show(venue_id=form.venue_id.data,
-      artist_id=form.artist_id.data,
-      start_time=form.start_time.data)
+        show=Show(venue_id=form.venue_id.data,
+        artist_id=form.artist_id.data,
+        start_time=form.start_time.data)
 
-    # on successful db insert, flash success
-      db.session.add(show)
-      db.session.commit()
-      flash('Show was successfully listed!')
-  except:
-    # on unsuccessful db insert, flash an error instead.
-    db.session.rollback()
-    print(sys.exc_info())
-    flash('Show was  NOT successfully listed!','error')
-    
-  finally:
-    # close the db session and redirect to template
-    db.session.close()
-    return render_template('pages/home.html')
+      # on successful db insert, flash success
+        db.session.add(show)
+        db.session.commit()
+        flash('Show was successfully listed!')
+    except:
+      # on unsuccessful db insert, flash an error instead.
+      db.session.rollback()
+      flash('Show was  NOT successfully listed!','error')
+      
+    finally:
+      # close the db session and redirect to template
+      db.session.close()
+  else:
+    flash('Show was successfully listed!')
+
+  return render_template('pages/home.html')
  
 
 @app.errorhandler(404)
