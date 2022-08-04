@@ -409,7 +409,53 @@ def show_artist(artist_id):
     "past_shows_count": 0,
     "upcoming_shows_count": 3,
   }
-  data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]
+  # data = list(filter(lambda d: d['id'] == artist_id, [data1, data2, data3]))[0]
+
+  artist=Artist.query.get(artist_id)
+
+  # Venue details
+  data={
+    "id": artist.id,
+    "name": artist.name,
+    "genres": artist.genres[1:-1].split(','),
+   
+    "city": artist.city,
+    "state":artist.state,
+    "phone": artist.phone,
+    "seeking_venue": artist.seeking_venue,
+    "image_link": artist.image_link
+  }
+  # Past Shows
+  data["past_shows"]=[]
+  #past shows query
+  past_shows=Show.query.filter(Show.id==artist.id).\
+      filter(Show.start_time<datetime.today().date())
+
+  for past_show in past_shows.all():
+    past_show_details={"venue_id": past_show.Venue.id,
+      "venue_name": past_show.Artist.name,
+      "venue_image_link": past_show.Venue.image_link,
+      "start_time": past_show.start_time}
+    data["past_shows"].append(past_show_details)
+
+  data["past_shows_count"]=past_shows.count()
+
+  #Artist Upcoming Shows
+
+  data["upcoming_shows"]=[]
+  upcoming_shows=Show.query.filter(Show.id==artist.id).\
+      filter(Show.start_time>=datetime.today().date())
+
+  for upcoming_show in upcoming_shows.all():
+    upcoming_shows_details={"venue_id": upcoming_show.Venue.id,
+      "venue_name": upcoming_show.Venue.name,
+      "venue_image_link": upcoming_show.Venue.image_link,
+      "start_time":upcoming_show.start_time}
+    data["past_shows"].append(upcoming_shows_details)
+
+  data["upcoming_shows_count"]=upcoming_shows.count()
+
+
   return render_template('pages/show_artist.html', artist=data)
 
 #  Update
