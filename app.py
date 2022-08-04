@@ -219,7 +219,7 @@ def show_venue(venue_id):
       "artist_name": upcoming_show.Artist.name,
       "artist_image_link": upcoming_show.Artist.image_link,
       "start_time":upcoming_show.start_time}
-    data["past_shows"].append(upcoming_shows_details)
+    data["upcoming_shows"].append(upcoming_shows_details)
 
   data["upcoming_shows_count"]=upcoming_shows.count()
 
