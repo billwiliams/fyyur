@@ -468,27 +468,31 @@ def edit_venue_submission(venue_id):
   # get record
   venue=Venue.query.get(venue_id)
   form=VenueForm(request.form)
+  # validate data 
+  if form.validate():
   
-  try:
-   
-    # validate data 
-    if form.validate():
+    try:
+    
       
-      form.populate_obj(venue)
-       # on successful db update, flash success
-    
-      db.session.commit()
-      flash('Venue  was successfully Edited!')
-  except:
-    # on unsuccessful db insert, flash an error instead.
-    db.session.rollback()
-    print(sys.exc_info())
+        
+        form.populate_obj(venue)
+        # on successful db update, flash success
+      
+        db.session.commit()
+        flash('Venue  was successfully Edited!')
+    except:
+      # on unsuccessful db insert, flash an error instead.
+      db.session.rollback()
+      print(sys.exc_info())
+      flash('Venue could not be Edited.','error')
+      
+    finally:
+      # close the db session and redirect to venue page
+      db.session.close()
+  else:
     flash('Venue could not be Edited.','error')
-    
-  finally:
-    # close the db session and redirect to venue page
-    db.session.close()
-    return redirect(url_for('show_venue', venue_id=venue_id))
+
+  return redirect(url_for('show_venue', venue_id=venue_id))
 
 #  Create Artist
 #  ----------------------------------------------------------------
