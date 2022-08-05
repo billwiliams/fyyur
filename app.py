@@ -124,7 +124,7 @@ def venues():
       filter(Venue.state==venue_location.state,Venue.city==venue_location.city).all()
     for venue in venues_in_state_city:
       # get number of upcoming shows
-      num_upcoming_shows=Show.query.filter(Show.id==venue.id).filter(Show.start_time>=datetime.today().date()).count()
+      num_upcoming_shows=Show.query.filter(Show.venue_id==venue.id).filter(Show.start_time>=datetime.today().date()).count()
       # append the venue details to the venue_details dict
       venue_details={'id':venue.id,"name":venue.name,"num_upcoming_shows":num_upcoming_shows}
       
@@ -162,7 +162,7 @@ def search_venues():
   # append venues in response
   for venue in venues.all():
     # aggregate number of supcoming shows per venue
-    num_upcoming_shows=Show.query.filter(Show.id==venue.id).\
+    num_upcoming_shows=Show.query.filter(Show.venue_id==venue.id).\
       filter(Show.start_time>=datetime.today().date()).count()
 
     venue_details={'id':venue.id,"name":venue.name,"num_upcoming_shows":num_upcoming_shows}
@@ -196,7 +196,7 @@ def show_venue(venue_id):
   # Past Shows
   data["past_shows"]=[]
   #past shows query
-  past_shows=Show.query.filter(Show.id==venue.id).\
+  past_shows=Show.query.filter(Show.venue_id==venue.id).\
       filter(Show.start_time<datetime.today().date())
 
   for past_show in past_shows.all():
@@ -211,7 +211,7 @@ def show_venue(venue_id):
   #Upcoming Shows
 
   data["upcoming_shows"]=[]
-  upcoming_shows=Show.query.filter(Show.id==venue.id).\
+  upcoming_shows=Show.query.filter(Show.venue_id==venue.id).\
       filter(Show.start_time>=datetime.today().date())
 
   for upcoming_show in upcoming_shows.all():
