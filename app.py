@@ -386,6 +386,8 @@ def show_artist(artist_id):
         "state": artist.state,
         "phone": artist.phone,
         "seeking_venue": artist.seeking_venue,
+        "facebook_link": artist.facebook_link,
+        "website": artist.website_link,
         "image_link": artist.image_link
     }
     # Past Shows

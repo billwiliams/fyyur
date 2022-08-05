@@ -131,7 +131,7 @@ class VenueForm(Form):
         choices=Genre.choices()
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[URL(),Regexp('^.+www.facebook.com\/[^\/]+$',message="incorrect facebook link")]
     )
     website_link = StringField(
         'website_link', validators=[URL()]
@@ -221,7 +221,8 @@ class ArtistForm(Form):
     )
     facebook_link = StringField(
         # TODO implement enum restriction
-        'facebook_link', validators=[URL()]
+        # ensures that facebook url follows normal profile or pages url
+        'facebook_link', validators=[URL(),Regexp('^.+www.facebook.com\/[^\/]+$',message="incorrect facebook link")]
     )
 
     website_link = StringField(
