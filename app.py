@@ -27,7 +27,7 @@ db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
 
-migrate = Migrate(app, db,compare_type=True)
+migrate = Migrate(app, db, compare_type=True)
 
 #----------------------------------------------------------------------------#
 # Models.
