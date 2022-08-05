@@ -346,7 +346,7 @@ def search_artists():
   # append artist in response
   for artist in artists.all():
     # aggregate number of supcoming shows per artist
-    num_upcoming_shows=Show.query.filter(Show.id==artist.id).\
+    num_upcoming_shows=Show.query.filter(Show.artist_id==artist.id).\
       filter(Show.start_time>=datetime.today().date()).count()
 
     artist_details={'id':artist.id,"name":artist.name,"num_upcoming_shows":num_upcoming_shows}
