@@ -27,7 +27,7 @@ db = SQLAlchemy(app)
 
 # TODO: connect to a local postgresql database
 
-migrate = Migrate(app, db)
+migrate = Migrate(app, db,compare_type=True)
 
 #----------------------------------------------------------------------------#
 # Models.
@@ -47,7 +47,7 @@ class Venue(db.Model):
     facebook_link = db.Column(db.String(120))
     website_link = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean, nullable=False, default=True)
-    genres = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String(120)))
     seeking_description = db.Column(db.String(120))
     shows = db.relationship('Show', backref='Venue',
                             passive_deletes=True, lazy=True)
@@ -63,7 +63,7 @@ class Artist(db.Model):
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
-    genres = db.Column(db.String(120))
+    genres = db.Column(db.ARRAY(db.String(120)))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     website_link = db.Column(db.String(120))
