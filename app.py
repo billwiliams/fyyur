@@ -380,7 +380,7 @@ def show_artist(artist_id):
     data = {
         "id": artist.id,
         "name": artist.name,
-        "genres": artist.genres[1:-1].split(','),
+        "genres": artist.genres,
 
         "city": artist.city,
         "state": artist.state,
