@@ -505,7 +505,7 @@ def create_artist_submission():
 @app.route('/shows')
 def shows():
     # displays list of shows at /shows
-    # TODO: replace with real venues data.
+
     data = []
 
     # query all shows
@@ -566,6 +566,21 @@ def create_show_submission():
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
+
+
+@app.errorhandler(401)
+def unauthorize_error(error):
+    return render_template('errors/401.html'), 401
+
+
+@app.errorhandler(403)
+def forbidden_error(error):
+    return render_template('errors/403.html'), 403
+
+
+@app.errorhandler(405)
+def invalid_method_error(error):
+    return render_template('errors/403.html'), 405
 
 
 @app.errorhandler(500)
