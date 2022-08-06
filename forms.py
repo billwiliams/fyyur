@@ -1,8 +1,9 @@
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
-from wtforms.validators import DataRequired, AnyOf, URL, Regexp, Length
+from wtforms.validators import DataRequired, AnyOf, URL, Regexp, Length, ValidationError
 from enum import Enum
+import re
 
 
 # Enum class for genres
@@ -35,8 +36,21 @@ class Genre(Enum):
 # Used as a  validator for states
 
 
-states=['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MT',
- 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'MD', 'MA', 'MI', 'MN', 'MS',  'MO', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+states = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
+          'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
+          'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH',
+          'OK', 'OR', 'MD', 'MA', 'MI', 'MN', 'MS',  'MO', 'PA', 'RI',
+          'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY']
+
+# validate phone
+
+
+def validate_phone(self, phone):
+    us_phone_num = '^([0-9]{3})[-][0-9]{3}[-][0-9]{4}$'
+    match = re.search(us_phone_num, phone.data)
+    if not match:
+        raise ValidationError(
+            'Error, phone number must be in format xxx-xxx-xxxx')
 
 
 class ShowForm(Form):
@@ -120,18 +134,18 @@ class VenueForm(Form):
         'address', validators=[DataRequired()]
     )
     phone = StringField(
-        'phone', validators=[DataRequired(), Regexp('^\d{3}[-]\d{3}[-]\d{4}$', message="Wrong phone number format")]
+        'phone', validators=[DataRequired(), validate_phone]
     )
     image_link = StringField(
         'image_link', validators=[URL()]
     )
     genres = SelectMultipleField(
-        # TODO implement enum restriction
+
         'genres', validators=[DataRequired(), Length(max=120)],
         choices=Genre.choices()
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL(),Regexp('^.+www.facebook.com\/[^\/]+$',message="incorrect facebook link")]
+        'facebook_link', validators=[URL(), Regexp('^.+www.facebook.com\/[^\/]+$', message="incorrect facebook link")]
     )
     website_link = StringField(
         'website_link', validators=[URL()]
@@ -208,21 +222,20 @@ class ArtistForm(Form):
         ]
     )
     phone = StringField(
-        # TODO implement validation logic for state
-        'phone', validators=[DataRequired(), Regexp('^\d{3}[-]\d{3}[-]\d{4}$', message="Wrong phone number format")]
+
+        'phone', validators=[DataRequired(), validate_phone]
     )
     image_link = StringField(
         'image_link', validators=[URL()]
     )
     genres = SelectMultipleField(
         'genres', validators=[DataRequired()],
-        
+
         choices=Genre.choices()
     )
     facebook_link = StringField(
-        # TODO implement enum restriction
         # ensures that facebook url follows normal profile or pages url
-        'facebook_link', validators=[URL(),Regexp('^.+www.facebook.com\/[^\/]+$',message="incorrect facebook link")]
+        'facebook_link', validators=[URL(), Regexp('^.+www.facebook.com\/[^\/]+$', message="incorrect facebook link")]
     )
 
     website_link = StringField(
