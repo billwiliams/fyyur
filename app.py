@@ -69,8 +69,8 @@ def index():
 
 @app.route('/venues')
 def venues():
-    # TODO: replace with real venues data.
-    #       num_upcoming_shows should be aggregated based on number of upcoming shows per venue.
+
+    # num_upcoming_shows should be aggregated based on number of upcoming shows per venue.
     data = []
     venue_locations = db.session.query(
         Venue.city, Venue.state).group_by(Venue.city, Venue.state).all()
@@ -99,7 +99,7 @@ def venues():
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
-    # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
+
     # seach for Hop should return "The Musical Hop".
     # search for "Music" should return "The Musical Hop" and "Park Square Live Music & Coffee"
 
@@ -137,7 +137,6 @@ def search_venues():
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
     # shows the venue page with the given venue_id
-    # TODO: replace with real venue data from the venues table, using venue_id
 
     venue = Venue.query.get(venue_id)
 
@@ -240,10 +239,7 @@ def create_venue_submission():
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
-    # TODO: Complete this endpoint for taking a venue_id, and using
-    # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
-    # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
-    # clicking that button delete it from the db then redirect the user to the homepage
+
     try:
 
         # Get the Venue to delete and delete
@@ -265,7 +261,6 @@ def delete_venue(venue_id):
 #  ----------------------------------------------------------------
 @app.route('/artists')
 def artists():
-    # TODO: replace with real data returned from querying the database
 
     data = []
     # get all artists
@@ -280,7 +275,7 @@ def artists():
 
 @app.route('/artists/search', methods=['POST'])
 def search_artists():
-    # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
+
     # seach for "A" should return "Guns N Petals", "Matt Quevado", and "The Wild Sax Band".
     # search for "band" should return "The Wild Sax Band".
 
@@ -318,7 +313,6 @@ def search_artists():
 @app.route('/artists/<int:artist_id>')
 def show_artist(artist_id):
     # shows the artist page with the given artist_id
-    # TODO: replace with real artist data from the artist table, using artist_id
 
     # get the artist
     artist = Artist.query.get(artist_id)
@@ -376,7 +370,6 @@ def show_artist(artist_id):
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
 
-    # TODO: populate form with fields from artist with ID <artist_id>
     # Venue Object
     artist = Artist.query.get(artist_id)
     # Populate form
@@ -387,7 +380,7 @@ def edit_artist(artist_id):
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
-    # TODO: take values from the form submitted, and update existing
+
     # artist record with ID <artist_id> using the new attributes
     artist = Artist.query.get(artist_id)
     form = ArtistForm(request.form)
@@ -417,7 +410,6 @@ def edit_artist_submission(artist_id):
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
 
-    # TODO: populate form with values from venue with ID <venue_id>
     # Venue Object
     venue = Venue.query.get(venue_id)
     # Populate form
@@ -428,8 +420,7 @@ def edit_venue(venue_id):
 
 @app.route('/venues/<int:venue_id>/edit', methods=['POST'])
 def edit_venue_submission(venue_id):
-    # TODO: take values from the form submitted, and update existing
-    # venue record with ID <venue_id> using the new attributes
+
     # get record
     venue = Venue.query.get(venue_id)
     form = VenueForm(request.form)
