@@ -53,6 +53,15 @@ def validate_phone(self, phone):
             'Error, phone number must be in format xxx-xxx-xxxx')
 
 
+#validate facebook
+
+def facebook_url(self,field):
+    facebook_page='^.+www.facebook.com\/[^\/]+$'
+    match=re.search(facebook_page,field.data)
+    if not match:
+        raise ValidationError('Error,incorrect facebook link')
+
+
 class ShowForm(Form):
     artist_id = StringField(
         'artist_id'
@@ -145,7 +154,7 @@ class VenueForm(Form):
         choices=Genre.choices()
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL(), Regexp('^.+www.facebook.com\/[^\/]+$', message="incorrect facebook link")]
+        'facebook_link', validators=[URL()]
     )
     website_link = StringField(
         'website_link', validators=[URL()]
@@ -235,7 +244,7 @@ class ArtistForm(Form):
     )
     facebook_link = StringField(
         # ensures that facebook url follows normal profile or pages url
-        'facebook_link', validators=[URL(), Regexp('^.+www.facebook.com\/[^\/]+$', message="incorrect facebook link")]
+        'facebook_link', validators=[URL()]
     )
 
     website_link = StringField(
